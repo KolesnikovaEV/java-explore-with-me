@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class StatsDto {
 
-    private Integer id;
+    private Long id;
 
     @NotBlank
     private String app;
