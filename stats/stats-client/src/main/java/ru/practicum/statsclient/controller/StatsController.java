@@ -11,7 +11,12 @@ import ru.practicum.statsclient.client.StatsClient;
 import ru.practicum.statsdto.StatsDto;
 
 import javax.validation.Valid;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static ru.practicum.statsdto.StatsCommonConfig.DATE_TIME_FORMAT;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,11 +32,13 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<Object> findStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-                                            @RequestParam (required = false) String[] uris,
-                                            @RequestParam (required = false, defaultValue = "false") boolean unique) {
-        return statsClient.findStats(start, end, uris, unique);
+    public ResponseEntity<Object> findStats(@RequestParam(name = "start") @DateTimeFormat(fallbackPatterns = DATE_TIME_FORMAT) String start,
+                                            @RequestParam(name = "end") @DateTimeFormat(fallbackPatterns = DATE_TIME_FORMAT) String end,
+                                            @RequestParam (required = false) List<String> uris,
+                                            @RequestParam (defaultValue = "false") boolean unique) {
+        LocalDateTime startDto = LocalDateTime.parse(URLDecoder.decode(start, Charset.defaultCharset()));
+        LocalDateTime endDto = LocalDateTime.parse(URLDecoder.decode(end, Charset.defaultCharset()));
+        return statsClient.findStats(startDto, endDto, uris, unique);
     }
 
 }

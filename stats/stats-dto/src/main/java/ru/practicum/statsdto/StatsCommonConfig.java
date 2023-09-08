@@ -12,8 +12,13 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class StatsCommonConfig {
 
-    @Value("yyyy-MM-dd HH:mm:ss")
-    private String dateTimeFormat;
+    private final String dateTimeFormat;
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+
+    public StatsCommonConfig(@Value("${dateTimeFormat}") String dateTimeFormat) {
+        this.dateTimeFormat = dateTimeFormat;
+    }
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
@@ -23,5 +28,4 @@ public class StatsCommonConfig {
             builder.deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
         };
     }
-
 }

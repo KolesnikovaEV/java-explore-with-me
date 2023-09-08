@@ -1,30 +1,38 @@
 package ru.practicum.statsdto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 
-@Data
-@RequiredArgsConstructor
+import static ru.practicum.statsdto.StatsCommonConfig.DATE_TIME_FORMAT;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
 public class StatsDto {
 
-    private Long id;
+    public Long id;
 
     @NotBlank
-    private String app;
+    public String app;
 
     @NotBlank
-    private String uri;
+    public String uri;
 
     @NotBlank
-    private String ip;
+    public String ip;
 
+    @NotNull
     @PastOrPresent
     @JsonProperty("timestamp")
-    private LocalDateTime timeStamp;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
+    public LocalDateTime timeStamp;
 
 }

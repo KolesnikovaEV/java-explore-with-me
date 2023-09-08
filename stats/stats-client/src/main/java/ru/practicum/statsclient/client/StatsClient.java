@@ -4,11 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.statsdto.StatsDto;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static ru.practicum.statsdto.StatsCommonConfig.DATE_TIME_FORMATTER;
 
 public class StatsClient extends BaseClient {
 
@@ -20,18 +20,14 @@ public class StatsClient extends BaseClient {
         return post("/hit", dto);
     }
 
-    public ResponseEntity<Object> findStats(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {
-        String path = "/stats?start={start}&end={end}&unique={unique}";
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("start", URLEncoder.encode(start.toString(), Charset.defaultCharset()));
-        parameters.put("end", URLEncoder.encode(end.toString(), Charset.defaultCharset()));
-        parameters.put("unique", unique);
-        if (uris != null) {
-            parameters.put("uris", uris);
-            path = path + "&uris={uris}";
-        }
-
-        return get(path, parameters);
+    public ResponseEntity<Object> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        Map<String, Object> parameters = Map.of(
+                "start", start.format(DATE_TIME_FORMATTER),
+                "end", end.format(DATE_TIME_FORMATTER),
+                "uris", String.join(", ", uris),
+                "unique", unique
+        );
+        return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
 
 }

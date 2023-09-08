@@ -5,9 +5,12 @@ import ru.practicum.statsdto.StatsDto;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 public interface StatsService {
+
     void saveStats(StatsDto dto);
 
-    Collection<GetStatsDto> findStats(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique);
+    Collection<GetStatsDto> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique);
+
 }

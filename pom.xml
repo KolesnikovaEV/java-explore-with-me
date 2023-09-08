@@ -24,7 +24,7 @@
 
 	<modules>
 		<module>stats</module>
-	</modules>
+    </modules>
 
 	<build>
 		<pluginManagement>
