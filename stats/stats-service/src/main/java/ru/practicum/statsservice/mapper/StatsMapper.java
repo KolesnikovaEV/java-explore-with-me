@@ -1,12 +1,12 @@
 package ru.practicum.statsservice.mapper;
 
 import lombok.Builder;
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 import ru.practicum.statsdto.StatsDto;
 import ru.practicum.statsservice.model.Stats;
 
-@Builder
-@Component
+@UtilityClass
 public class StatsMapper {
 
     public Stats toModel(StatsDto dto) {

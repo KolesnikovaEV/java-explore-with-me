@@ -18,11 +18,10 @@ public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository repository;
 
-    private final StatsMapper mapper;
 
     @Override
     public void saveStats(StatsDto dto) {
-        repository.save(mapper.toModel(dto));
+        repository.save(StatsMapper.toModel(dto));
     }
 
     @Override
