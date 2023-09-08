@@ -1,7 +1,6 @@
 package ru.practicum.statsdto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 @RequiredArgsConstructor
-@Builder
 public class StatsDto {
 
     private Long id;
