@@ -13,7 +13,7 @@ services:
 
   stats-server:
     build: stats-service/stats-server
-    container_name: ewm-service
+    container_name: ewm-stats-server
     ports:
       - "9090:9090"
     depends_on:
@@ -36,3 +36,12 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     hostname: emw_statistics_db
+
+  ewm-service:
+    image: amazoncorretto:11-alpine-jdk
+    container_name: ewm-service
+    ports:
+      - "7070:7070"
+
+  ewm-db:
+    image: postgres:14-alpine
