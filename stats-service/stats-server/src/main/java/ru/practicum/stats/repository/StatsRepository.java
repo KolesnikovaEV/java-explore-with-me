@@ -5,27 +5,46 @@ import org.springframework.data.jpa.repository.Query;
 import ru.practicum.stats.model.HitEntity;
 import ru.practicum.statsdto.ResponseHitDto;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsRepository extends JpaRepository<HitEntity, Long> {
 
-    @Query("select new ru.practicum.statsdto.ResponseHitDto(" +
-            "   h.app, " +
-            "   h.uri, " +
-            "   case when :unique = true " +
-            "       then count(distinct(h.ip)) " +
-            "       else count(h.ip) " +
-            "   end " +
-            ") " +
-            "from HitEntity h " +
-            "where h.timestamp between :start and :end" +
-            "   and (coalesce(:uris, null) is null or h.uri in :uris) " +
-            "group by h.app, h.uri " +
-            "order by 3 desc")
-    List<ResponseHitDto> getStats(LocalDateTime start,
-                                  LocalDateTime end,
-                                  List<String> uris,
-                                  Boolean unique);
+//    @Query("select new ru.practicum.statsdto.ResponseHitDto(" +
+//            "   h.app, " +
+//            "   h.uri, " +
+//            "   case when :unique = true " +
+//            "       then count(distinct(h.ip)) " +
+//            "       else count(h.ip) " +
+//            "   end " +
+//            ") " +
+//            "from HitEntity h " +
+//            "where h.timestamp between :start and :end" +
+//            "   and (coalesce(:uris, null) is null or h.uri in :uris) " +
+//            "group by h.app, h.uri " +
+//            "order by 3 desc")
+//    List<ResponseHitDto> getStats(LocalDateTime start,
+//                                  LocalDateTime end,
+//                                  List<String> uris,
+//                                  Boolean unique);
+
+    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (S.id) AS hits " +
+            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
+            "AND S.uri in :uris GROUP BY S.app, S.uri order by hits DESC ")
+    List<ResponseHitDto> findAllStatsWithUris(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (distinct S.ip) AS hits " +
+            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
+            "AND S.uri in :uris GROUP BY S.app, S.uri order by hits DESC ")
+    List<ResponseHitDto> findUniqueStatsWithUris(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (S.id) AS hits " +
+            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
+            "GROUP BY S.app, S.uri order by hits DESC ")
+    List<ResponseHitDto> findAllStatsWithoutUris(LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (distinct S.ip) AS hits " +
+            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
+            "GROUP BY S.app, S.uri order by hits DESC ")
+    List<ResponseHitDto> findUniqueStatsWithoutUris(LocalDateTime start, LocalDateTime end);
 }

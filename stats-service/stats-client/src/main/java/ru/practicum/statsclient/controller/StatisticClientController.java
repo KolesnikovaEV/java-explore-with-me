@@ -7,9 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.statsclient.client.StatisticsClient;
+import ru.practicum.statsclient.client.StatsClient;
 import ru.practicum.statsdto.RequestHitDto;
-
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -22,7 +21,7 @@ import static ru.practicum.statsdto.util.Constant.DATE_TIME_FORMAT;
 @RequiredArgsConstructor
 @Validated
 public class StatisticClientController {
-    private final StatisticsClient client;
+    private final StatsClient client;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
