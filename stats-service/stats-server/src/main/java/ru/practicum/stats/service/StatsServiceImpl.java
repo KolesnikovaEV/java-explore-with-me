@@ -28,14 +28,20 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ResponseHitDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        if (unique && uris != null) {
-            return repository.findUniqueStatsWithUris(start, end, uris);
-        } else if (unique) {
-            return repository.findUniqueStatsWithoutUris(start, end);
-        } else if (uris != null) {
-            return repository.findAllStatsWithUris(start, end, uris);
-        } else {
-            return repository.findAllStatsWithoutUris(start, end);
-        }
+        return repository.getStats(start, end, uris, unique);
     }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<ResponseHitDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+//        if (unique && uris != null) {
+//            return repository.findUniqueStatsWithUris(start, end, uris);
+//        } else if (unique) {
+//            return repository.findUniqueStatsWithoutUris(start, end);
+//        } else if (uris != null) {
+//            return repository.findAllStatsWithUris(start, end, uris);
+//        } else {
+//            return repository.findAllStatsWithoutUris(start, end);
+//        }
+//    }
 }
