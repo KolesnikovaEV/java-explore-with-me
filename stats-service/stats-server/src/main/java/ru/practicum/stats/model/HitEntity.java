@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "hit", schema = "public")
+@Table(name = "stats", schema = "public")
 @Getter
 @Setter
 @Builder(toBuilder = true)

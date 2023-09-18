@@ -9,7 +9,6 @@ import ru.practicum.stats.repository.StatsRepository;
 import ru.practicum.statsdto.RequestHitDto;
 import ru.practicum.statsdto.ResponseHitDto;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,17 +30,4 @@ public class StatsServiceImpl implements StatsService {
         return repository.getStats(start, end, uris, unique);
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<ResponseHitDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-//        if (unique && uris != null) {
-//            return repository.findUniqueStatsWithUris(start, end, uris);
-//        } else if (unique) {
-//            return repository.findUniqueStatsWithoutUris(start, end);
-//        } else if (uris != null) {
-//            return repository.findAllStatsWithUris(start, end, uris);
-//        } else {
-//            return repository.findAllStatsWithoutUris(start, end);
-//        }
-//    }
 }

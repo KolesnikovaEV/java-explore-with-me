@@ -28,23 +28,4 @@ public interface StatsRepository extends JpaRepository<HitEntity, Long> {
                                   List<String> uris,
                                   Boolean unique);
 
-//    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (S.id) AS hits " +
-//            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
-//            "AND S.uri in :uris GROUP BY S.app, S.uri order by hits DESC ")
-//    List<ResponseHitDto> findAllStatsWithUris(LocalDateTime start, LocalDateTime end, List<String> uris);
-//
-//    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (distinct S.ip) AS hits " +
-//            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
-//            "AND S.uri in :uris GROUP BY S.app, S.uri order by hits DESC ")
-//    List<ResponseHitDto> findUniqueStatsWithUris(LocalDateTime start, LocalDateTime end, List<String> uris);
-//
-//    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (S.id) AS hits " +
-//            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
-//            "GROUP BY S.app, S.uri order by hits DESC ")
-//    List<ResponseHitDto> findAllStatsWithoutUris(LocalDateTime start, LocalDateTime end);
-//
-//    @Query("SELECT S.app AS app, S.uri AS uri, COUNT (distinct S.ip) AS hits " +
-//            "FROM HitEntity AS S WHERE S.timestamp BETWEEN :start AND :end " +
-//            "GROUP BY S.app, S.uri order by hits DESC ")
-//    List<ResponseHitDto> findUniqueStatsWithoutUris(LocalDateTime start, LocalDateTime end);
 }

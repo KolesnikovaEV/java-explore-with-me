@@ -30,7 +30,6 @@ public class StatisticClientController {
     }
 
     @GetMapping("/stats")
-    //@StartBeforeEndDateConstraint
     public ResponseEntity<Object> getStats(@RequestParam(name = "start") @DateTimeFormat(fallbackPatterns = DATE_TIME_FORMAT) LocalDateTime start,
                                            @RequestParam(name = "end") @DateTimeFormat(fallbackPatterns = DATE_TIME_FORMAT) LocalDateTime end,
                                            @RequestParam(name = "uris", required = false) List<String> uris,
