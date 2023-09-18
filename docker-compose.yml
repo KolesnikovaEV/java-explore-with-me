@@ -1,30 +1,34 @@
 version: '3.1'
 services:
-  stats-client:
+  ewm-service:
     build: stats-service/stats-client
-    container_name: stats-client
+    container_name: ewm-service
     ports:
-      - "9090:9090"
+      - "8080:8080"
     depends_on:
       - stats-server
+      - stats-db
     environment:
-      - STAT_CLIENT_PORT=9090
-      - STAT_SERVER_ADDRESS=http://stats-server:8080
+#      - STAT_CLIENT_PORT=9090
+      - STAT_SERVER_ADDRESS=http://server:9090
 
   stats-server:
     build: stats-service/stats-server
     container_name: stats-server
     ports:
-      - "8080:8080"
+      - "9090:9090"
     depends_on:
       - stats-db
     environment:
-      STAT_SERVER_PORT: 8080
-      DB_HOST: emw_statistics_db
-      DB_PORT: 5432
-      DB_NAME: stats-db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      - DB_HOST=emw_statistics_db
+      - DB_PORT=5432
+      - DB_NAME=stats-db
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - STAT_SERVER_ADDRESS=http://localhost:9090
+
+#      STAT_SERVER_PORT: 8080
+
 
   stats-db:
     image: postgres:13.7-alpine

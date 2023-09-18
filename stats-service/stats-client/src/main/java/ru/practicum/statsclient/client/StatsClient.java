@@ -28,16 +28,13 @@ public class StatsClient extends BaseClient {
         return post("/hit", hitDto);
     }
 
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end,
-                                           List<String> uris, boolean unique) {
-
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         Map<String, Object> parameters = Map.of(
                 "start", start.format(DATE_TIME_FORMATTER),
                 "end", end.format(DATE_TIME_FORMATTER),
-                "uris", String.join(",", uris),
+                "uris", String.join(", ", uris),
                 "unique", unique
         );
-
         return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
 }
