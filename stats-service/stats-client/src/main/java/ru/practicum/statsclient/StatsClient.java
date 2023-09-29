@@ -24,8 +24,8 @@ public class StatsClient {
     private final RestTemplate restTemplate;
 
 
-    public void postHit(RequestHitDto endpointHitRequestDto) {
-        restTemplate.postForLocation(serverUrl.concat("/hit"), endpointHitRequestDto);
+    public void postHit(RequestHitDto requestHitDto) {
+        restTemplate.postForLocation(serverUrl.concat("/hit"), requestHitDto);
     }
 
     public List<ResponseHitDto> getStats(LocalDateTime start, LocalDateTime end,
