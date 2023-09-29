@@ -18,7 +18,7 @@ import static ru.practicum.statsdto.util.Constant.DATE_TIME_FORMATTER;
 @Service
 @RequiredArgsConstructor
 public class StatsClient {
-    @Value("${statistics.server.address}")
+    @Value("${stats-server.url}")
     private String serverUrl;
 
     private final RestTemplate restTemplate;
