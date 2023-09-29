@@ -1,4 +1,4 @@
-package ru.practicum.statsclient.client;
+package ru.practicum.statsclient;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

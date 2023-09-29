@@ -21,7 +21,7 @@ import ru.practicum.main.mapper.LocationMapper;
 import ru.practicum.main.mapper.RequestMapper;
 import ru.practicum.main.repository.*;
 import ru.practicum.main.service.EventService;
-import ru.practicum.statsclient.client.StatsClient;
+import ru.practicum.statsclient.StatsClient;
 import ru.practicum.statsdto.RequestHitDto;
 import ru.practicum.statsdto.ResponseHitDto;
 
