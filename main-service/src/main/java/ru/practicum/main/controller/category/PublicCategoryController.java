@@ -23,7 +23,6 @@ import static ru.practicum.main.util.Constant.PAGE_DEFAULT_SIZE;
 @RequestMapping("/categories")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class PublicCategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;

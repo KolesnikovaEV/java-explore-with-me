@@ -25,7 +25,6 @@ import static ru.practicum.main.util.Constant.*;
 @RequestMapping("/events")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class PublicEventController {
     private final EventService eventService;
 

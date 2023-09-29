@@ -27,7 +27,6 @@ import static ru.practicum.main.util.Constant.PAGE_DEFAULT_SIZE;
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class AdminUserController {
     private final UserService userService;
     private final UserMapper userMapper;

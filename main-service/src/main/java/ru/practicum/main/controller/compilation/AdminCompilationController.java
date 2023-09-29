@@ -16,7 +16,6 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/admin/compilations")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class AdminCompilationController {
     private final CompilationService compilationService;
 

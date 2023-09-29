@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/users/{userId}/requests")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class PrivateRequestController {
     private final RequestService requestService;
     private final RequestMapper requestMapper;

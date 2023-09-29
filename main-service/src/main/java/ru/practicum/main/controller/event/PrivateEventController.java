@@ -20,14 +20,14 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
-import static ru.practicum.main.util.Constant.*;
+import static ru.practicum.main.util.Constant.PAGE_DEFAULT_FROM;
+import static ru.practicum.main.util.Constant.PAGE_DEFAULT_SIZE;
 
 
 @RestController
 @RequestMapping("/users/{userId}/events")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class PrivateEventController {
     private final EventService eventService;
 

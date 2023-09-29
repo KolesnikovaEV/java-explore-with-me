@@ -20,7 +20,6 @@ import static ru.practicum.main.util.Constant.PAGE_DEFAULT_SIZE;
 @RequestMapping("/compilations")
 @RequiredArgsConstructor
 @Validated
-//@ToLog
 public class PublicCompilationController {
     private final CompilationService compilationService;
 
