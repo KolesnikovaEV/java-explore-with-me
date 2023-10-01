@@ -15,6 +15,7 @@ public class DateValidator implements ConstraintValidator<EventDateValidator, Lo
         LocalDateTime now = LocalDateTime.now();
         if (eventDate != null) {
             return eventDate.isAfter(now.plusHours(2L));
-        } else return true;
+        }
+        return true;
     }
 }

@@ -34,9 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (isExist) {
             throw new NotAvailableException(String.format("Category %s isn't empty", catId));
-        } else {
-            categoryRepository.delete(category);
         }
+        categoryRepository.delete(category);
     }
 
     @Override

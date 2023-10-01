@@ -10,9 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Getter
-@Setter
-@ToString
+@Data
 @Table(name = "compilations")
 public class Compilation {
 
