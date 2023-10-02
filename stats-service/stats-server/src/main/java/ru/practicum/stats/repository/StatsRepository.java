@@ -2,6 +2,7 @@ package ru.practicum.stats.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.practicum.stats.model.HitEntity;
 import ru.practicum.statsdto.ResponseHitDto;
 
@@ -23,9 +24,9 @@ public interface StatsRepository extends JpaRepository<HitEntity, Long> {
             "   and (coalesce(:uris, null) is null or h.uri in :uris) " +
             "group by h.app, h.uri " +
             "order by 3 desc")
-    List<ResponseHitDto> getStats(LocalDateTime start,
-                                  LocalDateTime end,
-                                  List<String> uris,
-                                  Boolean unique);
+    List<ResponseHitDto> getStats(@Param("start") LocalDateTime start,
+                                  @Param("end") LocalDateTime end,
+                                  @Param("uris") List<String> uris,
+                                  @Param("unique") Boolean unique);
 
 }

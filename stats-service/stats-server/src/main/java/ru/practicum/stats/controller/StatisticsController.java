@@ -2,6 +2,7 @@ package ru.practicum.stats.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.stats.service.StatsService;
 import ru.practicum.statsdto.RequestHitDto;
 import ru.practicum.statsdto.ResponseHitDto;
@@ -21,6 +23,7 @@ import static ru.practicum.statsdto.util.Constant.DATE_TIME_FORMAT;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class StatisticsController {
     private final StatsService service;
 
@@ -35,6 +38,9 @@ public class StatisticsController {
                                          @RequestParam(name = "end") @DateTimeFormat(fallbackPatterns = DATE_TIME_FORMAT) LocalDateTime end,
                                          @RequestParam(name = "uris", required = false) List<String> uris,
                                          @RequestParam(name = "unique", defaultValue = "false") boolean unique) {
+        if (start.isAfter(end)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End cannot be earlier than start");
+        }
         return service.getStats(start, end, uris, unique);
     }
 }
