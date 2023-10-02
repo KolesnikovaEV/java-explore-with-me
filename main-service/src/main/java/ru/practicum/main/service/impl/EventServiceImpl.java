@@ -21,6 +21,7 @@ import ru.practicum.main.mapper.LocationMapper;
 import ru.practicum.main.mapper.RequestMapper;
 import ru.practicum.main.repository.*;
 import ru.practicum.main.service.EventService;
+
 import ru.practicum.statsclient.StatsClient;
 import ru.practicum.statsdto.RequestHitDto;
 import ru.practicum.statsdto.ResponseHitDto;
@@ -42,6 +43,7 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
+    private final CommentRepository commentRepository;
     private final StatsClient statsClient;
 
     @Value("${app.name}")
@@ -276,12 +278,19 @@ public class EventServiceImpl implements EventService {
                 .map(eventMapper::toEventShortDto)
                 .collect(Collectors.toList());
 
+        List<Map<Long, Long>> commentCounts = commentRepository.countCommentsByEventIdsIn(eventIds);
+
+        Map<Long, Long> comments = commentCounts.stream()
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
         Map<Long, Long> eventsViews = getViews(eventIds);
         Map<Long, Long> confirmedRequests = getConfirmedRequests(eventIds);
 
         dtos.forEach(el -> {
             el.setViews(eventsViews.getOrDefault(el.getId(), 0L));
             el.setConfirmedRequests(confirmedRequests.getOrDefault(el.getId(), 0L));
+            el.setComments(comments.getOrDefault(el.getId(), 0L));
         });
 
         return dtos;
@@ -299,14 +308,14 @@ public class EventServiceImpl implements EventService {
     }
 
     private void sendStats(String uri, String ip) {
-        RequestHitDto endpointHitRequestDto = RequestHitDto.builder()
+        RequestHitDto requestHitDto = RequestHitDto.builder()
                 .app(app)
                 .uri(uri)
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
                 .build();
 
-        statsClient.postHit(endpointHitRequestDto);
+        statsClient.postHit(requestHitDto);
     }
 
     private Map<Long, Long> getViews(Collection<Long> eventsId) {
