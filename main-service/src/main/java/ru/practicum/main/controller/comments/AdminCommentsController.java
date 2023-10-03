@@ -15,7 +15,7 @@ import javax.validation.constraints.Positive;
 public class AdminCommentsController {
     private final CommentService commentService;
 
-    @DeleteMapping()
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCommentByAdmin(@Positive @RequestParam Long commentId) {
         commentService.deleteCommentByAdmin(commentId);

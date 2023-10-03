@@ -27,7 +27,7 @@ public class PrivateCommentsController {
         return commentService.saveComment(userId, dto, eventId);
     }
 
-    @DeleteMapping()
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCommentAddedCurrentUser(@Positive @RequestParam Long commentId,
                                               @Positive @PathVariable Long userId) {

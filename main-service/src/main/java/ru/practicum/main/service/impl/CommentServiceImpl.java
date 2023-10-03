@@ -20,7 +20,6 @@ import ru.practicum.main.repository.UserRepository;
 import ru.practicum.main.service.CommentService;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,13 +58,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteCommentByAdmin(Long commentId) {
-        boolean isExist = commentRepository.existsById(commentId);
+        boolean isNotExist = !commentRepository.existsById(commentId);
 
-        if (isExist) {
-            commentRepository.deleteById(commentId);
-        } else {
+        if (isNotExist) {
             throw new NotFoundException(String.format("Comment %s not found", commentId));
         }
+
+        commentRepository.deleteById(commentId);
     }
 
     @Override
@@ -86,10 +85,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<FullCommentDto> getCommentsByEventId(Long eventId, Pageable pageable) {
         List<Comment> comments = commentRepository.getCommentsByEventId(eventId, pageable);
-
-        if (comments.isEmpty()) {
-            return Collections.emptyList();
-        }
 
         return comments.stream()
                 .map(commentMapper::toFullCommentDto)

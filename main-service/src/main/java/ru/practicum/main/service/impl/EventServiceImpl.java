@@ -21,7 +21,6 @@ import ru.practicum.main.mapper.LocationMapper;
 import ru.practicum.main.mapper.RequestMapper;
 import ru.practicum.main.repository.*;
 import ru.practicum.main.service.EventService;
-
 import ru.practicum.statsclient.StatsClient;
 import ru.practicum.statsdto.RequestHitDto;
 import ru.practicum.statsdto.ResponseHitDto;
@@ -270,28 +269,38 @@ public class EventServiceImpl implements EventService {
     }
 
     private List<EventShortDto> mapToEventShortDto(Collection<Event> events) {
-        List<Long> eventIds = events.stream()
-                .map(Event::getId)
-                .collect(Collectors.toList());
-
         List<EventShortDto> dtos = events.stream()
                 .map(eventMapper::toEventShortDto)
                 .collect(Collectors.toList());
 
-        List<Map<Long, Long>> commentCounts = commentRepository.countCommentsByEventIdsIn(eventIds);
+        if (!events.isEmpty()) {
+            List<Long> eventIds = events.stream()
+                    .map(Event::getId)
+                    .collect(Collectors.toList());
 
-        Map<Long, Long> comments = commentCounts.stream()
-                .flatMap(map -> map.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            List<Map<Long, Long>> commentCounts = null;
+            if (!eventIds.isEmpty()) {
+                commentCounts = commentRepository.countCommentsByEventIdsIn(eventIds);
+            }
 
-        Map<Long, Long> eventsViews = getViews(eventIds);
-        Map<Long, Long> confirmedRequests = getConfirmedRequests(eventIds);
+            Map<Long, Long> comments;
+            if (commentCounts != null) {
+                comments = commentCounts.stream()
+                        .flatMap(map -> map.entrySet().stream())
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            } else {
+                comments = new HashMap<>();
+            }
 
-        dtos.forEach(el -> {
-            el.setViews(eventsViews.getOrDefault(el.getId(), 0L));
-            el.setConfirmedRequests(confirmedRequests.getOrDefault(el.getId(), 0L));
-            el.setComments(comments.getOrDefault(el.getId(), 0L));
-        });
+            Map<Long, Long> eventsViews = getViews(eventIds);
+            Map<Long, Long> confirmedRequests = getConfirmedRequests(eventIds);
+
+            dtos.forEach(el -> {
+                el.setViews(eventsViews.getOrDefault(el.getId(), 0L));
+                el.setConfirmedRequests(confirmedRequests.getOrDefault(el.getId(), 0L));
+                el.setComments(comments.getOrDefault(el.getId(), 0L));
+            });
+        }
 
         return dtos;
     }
