@@ -42,6 +42,7 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
+    private final CommentRepository commentRepository;
     private final StatsClient statsClient;
 
     @Value("${app.name}")
@@ -268,21 +269,38 @@ public class EventServiceImpl implements EventService {
     }
 
     private List<EventShortDto> mapToEventShortDto(Collection<Event> events) {
-        List<Long> eventIds = events.stream()
-                .map(Event::getId)
-                .collect(Collectors.toList());
-
         List<EventShortDto> dtos = events.stream()
                 .map(eventMapper::toEventShortDto)
                 .collect(Collectors.toList());
 
-        Map<Long, Long> eventsViews = getViews(eventIds);
-        Map<Long, Long> confirmedRequests = getConfirmedRequests(eventIds);
+        if (!events.isEmpty()) {
+            List<Long> eventIds = events.stream()
+                    .map(Event::getId)
+                    .collect(Collectors.toList());
 
-        dtos.forEach(el -> {
-            el.setViews(eventsViews.getOrDefault(el.getId(), 0L));
-            el.setConfirmedRequests(confirmedRequests.getOrDefault(el.getId(), 0L));
-        });
+            List<Map<Long, Long>> commentCounts = null;
+            if (!eventIds.isEmpty()) {
+                commentCounts = commentRepository.countCommentsByEventIdsIn(eventIds);
+            }
+
+            Map<Long, Long> comments;
+            if (commentCounts != null) {
+                comments = commentCounts.stream()
+                        .flatMap(map -> map.entrySet().stream())
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            } else {
+                comments = new HashMap<>();
+            }
+
+            Map<Long, Long> eventsViews = getViews(eventIds);
+            Map<Long, Long> confirmedRequests = getConfirmedRequests(eventIds);
+
+            dtos.forEach(el -> {
+                el.setViews(eventsViews.getOrDefault(el.getId(), 0L));
+                el.setConfirmedRequests(confirmedRequests.getOrDefault(el.getId(), 0L));
+                el.setComments(comments.getOrDefault(el.getId(), 0L));
+            });
+        }
 
         return dtos;
     }
@@ -299,14 +317,14 @@ public class EventServiceImpl implements EventService {
     }
 
     private void sendStats(String uri, String ip) {
-        RequestHitDto endpointHitRequestDto = RequestHitDto.builder()
+        RequestHitDto requestHitDto = RequestHitDto.builder()
                 .app(app)
                 .uri(uri)
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
                 .build();
 
-        statsClient.postHit(endpointHitRequestDto);
+        statsClient.postHit(requestHitDto);
     }
 
     private Map<Long, Long> getViews(Collection<Long> eventsId) {
